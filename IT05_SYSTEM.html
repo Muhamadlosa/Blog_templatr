@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodie Express - Ordering System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #fff8f0;
+    color: #333;
+}
+
+header {
+    background: #e85d04;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.cart-button {
+    background: white;
+    color: #e85d04;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hero {
+    text-align: center;
+    padding: 55px 20px;
+    background: #ffedd8;
+}
+
+.hero h1 {
+    font-size: 36px;
+    color: #d9480f;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #555;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 35px auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #d9480f;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #00000012;
+    transition: 0.3s;
+}
+
+.food-card:hover {
+    transform: translateY(-5px);
+}
+
+.food-image {
+    height: 155px;
+    background: #ffe8cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+}
+
+.food-info {
+    padding: 18px;
+}
+
+.food-info h3 {
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.price {
+    color: #e85d04;
+    font-weight: bold;
+    font-size: 19px;
+    margin-bottom: 15px;
+}
+
+.add-btn {
+    background: #e85d04;
+    color: white;
+    border: none;
+    padding: 11px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: #c74600;
+}
+
+.cart-section {
+    background: white;
+    padding: 25px;
+    margin-top: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px #00000012;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.quantity button {
+    border: none;
+    background: #ffe8cc;
+    color: #d9480f;
+    padding: 6px 11px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.remove-btn {
+    background: #dc3545 !important;
+    color: white !important;
+}
+
+.total {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #e85d04;
+}
+
+.checkout {
+    background: #e85d04;
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.checkout:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.customer-form {
+    margin-top: 20px;
+}
+
+.customer-form input,
+.customer-form select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 50px;
+}
+
+.empty {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+}
+
+@media(max-width:600px) {
+    .hero h1 {
+        font-size: 27px;
+    }
+
+    header {
+        justify-content: center;
+    }
+
+    .cart-item {
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🍔 Foodie Express</div>
+    <button class="cart-button" onclick="goToCart()">
+        🛒 My Cart (<span id="cartCount">0</span>)
+    </button>
+</header>
+
+<section class="hero">
+    <h1>Delicious Food, Delivered!</h1>
+    <p>Choose your favorite food and order now.</p>
+</section>
+
+<div class="container">
+
+    <h2 class="section-title">🍽️ Our Food Menu</h2>
+
+    <div class="menu" id="menu"></div>
+
+    <section class="cart-section" id="cartSection">
+        <h2>🛒 Your Shopping Cart</h2>
+
+        <div id="cartItems">
+            <p class="empty">Your cart is empty.</p>
+        </div>
+
+        <div class="total">
+            Total: ₱<span id="total">0.00</span>
+        </div>
+
+        <div class="customer-form">
+            <h3>Customer Information</h3>
+
+            <input type="text" id="customerName"
+                placeholder="Enter your full name">
+
+            <input type="text" id="address"
+                placeholder="Enter your delivery address">
+
+            <input type="tel" id="phone"
+                placeholder="Enter your phone number">
+
+            <select id="payment">
+                <option value="">Select Payment Method</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+                <option value="GCash (Demo)">GCash (Demo)</option>
+            </select>
+        </div>
+
+        <butto
